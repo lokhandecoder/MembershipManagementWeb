@@ -25,22 +25,22 @@ function ProfileInfo() {
           <Typography variant="h4" gutterBottom>
             {`${member.firstName} ${member.lastName}`}
           </Typography>
-          <Typography variant="subtitle1" gutterBottom>
+          <Typography variant="h6" gutterBottom>
             Email: {member.emailAddress}
           </Typography>
-          <Typography variant="subtitle1" gutterBottom>
+          <Typography variant="h6" gutterBottom>
             Mobile Number: {member.mobileNumber}
           </Typography>
-          <Typography variant="subtitle1" gutterBottom>
+          <Typography variant="h6" gutterBottom>
             Address: {member.address}
           </Typography>
-          <Typography variant="subtitle1" gutterBottom>
+          <Typography variant="h6" gutterBottom>
             Date of Birth: {member.dob}
           </Typography>
-          <Typography variant="subtitle1" gutterBottom>
+          <Typography variant="h6" gutterBottom>
             Gender: {member.genderId === 1 ? "Male" : "Female"}
           </Typography>
-          <Typography variant="subtitle1" gutterBottom>
+          <Typography variant="h6" gutterBottom>
             Active: {member.isActive ? "Yes" : "No"}
           </Typography>
         </Box>
