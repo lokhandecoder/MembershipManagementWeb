@@ -9,7 +9,6 @@ export async function GetMemberByID(id : string): Promise<Member> {
     return getData.data;
   } catch (error) {
     console.error(error);
-    // Handle the error here, either by returning a default value or rethrowing the error
     throw error;
   }
 }

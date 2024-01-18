@@ -1,20 +1,22 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import LayoutComponent from '../Components/Fixed/LayoutComponent'
 import GenericTable from '../Components/Fixed/GenericTable'
 
-function MembersForm() {
+const MembersForm: React.FC = () => {
 
-	const data = [
-    { id: 1, name: 'John', job: 'Developer', branch: 'Technical' },
-    { id: 2, name: 'Jane', job: 'Designer', branch: 'Technical' },
-    { id: 3, name: 'Doe', job: 'Manager', branch: 'Technical' },
-  ];
+  // const data = [
+  //   { ID: 1, Name: 'John', Job: 'Developer', Branch: 'Technical' },
+  //   { ID: 2, Name: 'Jane', Job: 'Designer', Branch: 'Technical' },
+  //   { ID: 3, Name: 'Doe', Job: 'Manager', Branch: 'Technical' },
+  // ];
 
-	const columns = ['id', 'name', 'job', 'branch'];
+  const [data, setData] = useState([]);
+
+  useEffect(() => { fetch('http://localhost:8082/api/subscription/getSubscriptionsasync/').then((response) => response.json()).then((data) => setData(data)).catch((error) => console.error('Error fetching Data: ', error)); }, []);
 
   return (
     <LayoutComponent>
-				<GenericTable data={data} columns={columns}></GenericTable>
+      <GenericTable data={data}></GenericTable>
     </LayoutComponent>
   )
 }
