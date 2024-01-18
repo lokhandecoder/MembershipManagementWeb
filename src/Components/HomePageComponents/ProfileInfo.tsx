@@ -12,7 +12,7 @@ function ProfileInfo() {
 
     const fetchMember = async () => {
       const data = await GetMemberByID(userid);
-      setMember(data);
+      setMember(data ?? null);
       console.log(member);
     };
     fetchMember();

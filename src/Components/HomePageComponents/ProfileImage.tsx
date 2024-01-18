@@ -31,7 +31,7 @@ const ProfileImage: React.FC<ProfileImageProps> = ({ defaultImage }) => {
 
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div style={{ display: "flex", justifyContent: "center", height: "auto" }}>
         <div
           style={{
             width: "200px",
