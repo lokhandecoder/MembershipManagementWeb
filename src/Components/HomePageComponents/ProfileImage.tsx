@@ -71,10 +71,9 @@ const ProfileImage: React.FC<ProfileImageProps> = ({ defaultImage }) => {
           </Button>
         ) : (
           <>
-            <input type="file" accept="image/*" onChange={handleImageChange} />s
+            <input type="file" accept="image/*" onChange={handleImageChange} />
             <Button
               variant="contained"
-              disabled={!image}
               onClick={handleSaveImage}
             >
               Save Image
