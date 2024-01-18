@@ -14,7 +14,7 @@ const MembersForm: React.FC = () => {
 
   // useEffect(() => { fetch('http://localhost:8082/api/subscription/getSubscriptionsasync/').then((response) => response.json()).then((data) => setData(data)).catch((error) => console.error('Error fetching Data: ', error)); }, []);
 
-  useEffect(() => { fetch('http://localhost:8083/api/user/').then((response) => response.json()).then((data) => setData(data)).catch((error) => console.error('Error fetching Data: ', error)); }, []);
+  useEffect(() => { fetch('http://localhost:8083/api/members/').then((response) => response.json()).then((data) => setData(data)).catch((error) => console.error('Error fetching Data: ', error)); }, []);
 
   return (
     <LayoutComponent>
