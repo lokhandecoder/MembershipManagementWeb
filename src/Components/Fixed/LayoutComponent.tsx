@@ -9,11 +9,13 @@ interface LayoutComponentProps {
 function LayoutComponent({ children }: LayoutComponentProps) {
   return (
     <>
-      <MiniDrawer />
+     <div style={{ backgroundColor: "pink", height: "auto"}}>
+     <MiniDrawer />
       <SideNav />
       <div style={{marginLeft: "4%", marginTop: "1.5%"}}>
       {children}
       </div>
+     </div>
     </>
   );
 }

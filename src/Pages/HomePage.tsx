@@ -4,7 +4,7 @@ import LayoutComponent from '../Components/Fixed/LayoutComponent'
 function HomePage() {
   return (
     <LayoutComponent>
-        <div>HomePage</div>
+        <div >HomePage</div>
     </LayoutComponent>
   )
 }
