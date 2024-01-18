@@ -1,5 +1,5 @@
 import React from 'react';
-import "../../Resources/Styles/GenericTable.css"
+// import "../../Resources/Styles/GenericTable.css"
 import { Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
 interface TableProps {
@@ -11,9 +11,9 @@ const TableComponent: React.FC<TableProps> = ({ data }) => {
 	const columns = data.length > 0 ? Object.keys(data[0]) : []
 
   return (
-    <Card elevation={3} className="custom-card">
+    <Card elevation={3}>
       <TableContainer component={Paper}>
-        <Table className="custom-table" aria-label="simple table">
+        <Table aria-label="simple table">
           <TableHead>
             <TableRow>
               {columns.map((column) => (
@@ -25,7 +25,9 @@ const TableComponent: React.FC<TableProps> = ({ data }) => {
             {data.map((item, index) => (
               <TableRow key={index}>
                 {columns.map((column) => (
-                  <TableCell key={column}>{item[column]}</TableCell>
+                  <TableCell key={column}>
+                    {typeof item[column] === 'boolean' ? item[column].toString() : item[column]}
+                  </TableCell>
                 ))}
               </TableRow>
             ))}
