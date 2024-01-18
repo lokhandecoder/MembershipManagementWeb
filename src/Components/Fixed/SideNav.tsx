@@ -132,7 +132,7 @@ export default function SideNav() {
               >
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="Member Table" sx={{ opacity: open ? 1 : 0 }} />
+              <ListItemText primary="Member's Table" sx={{ opacity: open ? 1 : 0 }} />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate('/payment')}>
@@ -152,7 +152,7 @@ export default function SideNav() {
               >
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="Create Account" sx={{ opacity: open ? 1 : 0 }} />
+              <ListItemText primary="Payment" sx={{ opacity: open ? 1 : 0 }} />
             </ListItemButton>
           </ListItem>
         </List>

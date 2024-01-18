@@ -12,7 +12,9 @@ const MembersForm: React.FC = () => {
 
   const [data, setData] = useState([]);
 
-  useEffect(() => { fetch('http://localhost:8082/api/subscription/getSubscriptionsasync/').then((response) => response.json()).then((data) => setData(data)).catch((error) => console.error('Error fetching Data: ', error)); }, []);
+  // useEffect(() => { fetch('http://localhost:8082/api/subscription/getSubscriptionsasync/').then((response) => response.json()).then((data) => setData(data)).catch((error) => console.error('Error fetching Data: ', error)); }, []);
+
+  useEffect(() => { fetch('http://localhost:8083/api/user/').then((response) => response.json()).then((data) => setData(data)).catch((error) => console.error('Error fetching Data: ', error)); }, []);
 
   return (
     <LayoutComponent>
