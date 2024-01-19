@@ -2,15 +2,14 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import HomePage from '../Pages/HomePage'
 import Payment from '../Pages/Payment'
-import Subscription from '../Pages/Subscription'
+import MembersForm from '../Pages/MembersPage'
 
 function PageRoutes() {
   return (
     <Routes>
         <Route path='/' element={<HomePage />} />
         <Route path='/payment' element={<Payment />} />
-        <Route path='/subscription' element={<Subscription />} />
-        
+        <Route path='/membertable' element={<MembersForm />} />
     </Routes>
   )
 }
