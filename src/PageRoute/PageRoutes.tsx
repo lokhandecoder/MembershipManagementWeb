@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import HomePage from '../Pages/HomePage'
 import Payment from '../Pages/Payment'
-import MembersForm from '../Pages/MembersTable'
+import MembersForm from '../Pages/MembersPage'
 
 function PageRoutes() {
   return (
