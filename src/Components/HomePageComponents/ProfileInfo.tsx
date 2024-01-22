@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import { Member } from "../../Models/MemberModel";
 import { GetMemberByID } from "../../Services/MembersServices";
 import { LogginID } from "../../API_CONFIG";
+
 function ProfileInfo() {
   const [member, setMember] = useState<Member | null>(null);
 
