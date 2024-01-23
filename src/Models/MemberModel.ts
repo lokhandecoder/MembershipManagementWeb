@@ -9,3 +9,9 @@ export interface Member {
     genderId: number;
     isActive: boolean;
   }
+
+export interface Gender {
+  id: number;
+  genderCode: string;
+  genderName: string;
+}
