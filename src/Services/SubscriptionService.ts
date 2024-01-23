@@ -1,0 +1,13 @@
+import axios from "axios";
+import { Row } from "../Models/RowModel";
+ // Replace with the correct path to your Row model
+
+export async function getSubscriptions(): Promise<Row[]> {
+  try {
+    const response = await axios.get('http://localhost:8082/api/subscription/getsubscriptionsasync');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching subscription data:', error);
+    throw error;
+  }
+}
