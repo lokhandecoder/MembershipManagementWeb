@@ -4,7 +4,7 @@ import GenericTable from '../Components/Fixed/GenericTableAtn';
 import { Plan } from '../Models/PlanModel';
 import { getPlans } from '../Services/PlanService';
 import { error } from 'console';
-import { getSubscriptions } from '../Services/SubscriptionService';
+import { getSubscriptions, getSubscriptionsByPlanId } from '../Services/SubscriptionService';
 import { GetMembersAsync } from '../Services/MembersServices';
 import { Member } from '../Models/MemberModel';
 
@@ -18,22 +18,13 @@ interface Row {
 }
 
 
+
 const Subscription: React.FC = () => {
   const [apiData, setApiData] = useState<{ columns: Column[]; rows: Row[] }>({ columns: [], rows: [] });
   const [planOptions, setPlanOptions] = useState<Plan[]>([]);
-  const [memberOptions, setMembersOptions] = useState<Member[]>([]);
   const [selectedPlanId, setSelectedPlanId] = useState<string>('');
 
   useEffect(() => {
-
-      getSubscriptions()
-      .then((apiDataFromApi: Row[]) => {
-        const columns: Column[] = Object.keys(apiDataFromApi[0]).map(key => ({ id: key, label: key }));
-        setApiData({ columns, rows: apiDataFromApi });
-      })
-      .catch(error => {
-        console.error('Error fetching subscription data:', error);
-      });
 
       getPlans()
       .then((planDataFromApi: Plan[]) => {
@@ -43,39 +34,42 @@ const Subscription: React.FC = () => {
         console.error('Error fetching plan data:', error);
       })
 
-
-
-
   }, []);
 
+  const fetchSubscriptions = async (planId?: string) => {
+    try {
+      const response = await getSubscriptionsByPlanId(selectedPlanId); // Call the new function with planId
+      const columns: Column[] = Object.keys(response[0]).map(key => ({ id: key, label: key }));
+      setApiData({ columns, rows: response });
+    } catch (error) {
+      console.error('Error fetching subscriptions:', error);
+    }
+  };
 
-  const filteredRows = selectedPlanId
-  ? apiData.rows.filter(row => row.planId === selectedPlanId)
-  : apiData.rows;
+  useEffect(() => {
+    fetchSubscriptions(); 
+  }, []);
+
+  const handlePlanChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedPlanId(event.target.value);
+    await fetchSubscriptions(event.target.value); // Fetch subscriptions with selected planId
+  };
+
+
   return (
     <LayoutComponent>
-      {/* Render your dropdown here using the planOptions state */}
-      {/* <select onChange={(e) => setSelectedPlanId(e.target.value)}>
+
+<select onChange={handlePlanChange} value={selectedPlanId}>
         <option value="">Select a plan</option>
         {planOptions.map((plan, index) => (
           <option key={index} value={plan.id}>
             {plan.planName}
           </option>
-          
-        ))}
-      </select> */}
-      <select onChange={(e) => setSelectedPlanId(e.target.value)}>
-        <option value="">Select a member</option>
-        {planOptions.map((plan, index) => (
-          <option key={index} value={plan.id}>
-            {plan.planName}
-          </option>
-          
         ))}
       </select>
 
       {/* Render the table with filtered rows */}
-      <GenericTable data={{ columns: apiData.columns, rows: filteredRows }} />
+      <GenericTable data={{ columns: apiData.columns, rows: apiData.rows }} />
     </LayoutComponent>
   );
 };
