@@ -3,7 +3,7 @@ import LayoutComponent from '../Components/Fixed/LayoutComponent'
 import GenericTable from '../Components/Fixed/GenericTable'
 import { GetAllGenders, GetAllMemberByGenderId, GetAllMembers, GetMemberByGenderId, GetMembers } from '../Services/MembersServices';
 import { Gender, Member } from '../Models/MemberModel';
-import { Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, InputAdornment, Pagination, TextField } from '@mui/material';
+import { Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, IconButton, InputAdornment, Pagination, Switch, TextField } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -266,6 +266,9 @@ const MembersForm: React.FC = () => {
                 getOptionLabel={(option) => option.genderName}
                 renderInput={(params) => <TextField {...params} label="Select Gender" />}
               />
+
+              <FormControlLabel control={<Switch />} label="IsActive" />
+
             </div>
           </DialogContent>
           <DialogActions>
