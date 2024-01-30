@@ -4,6 +4,10 @@ import GenericTable from '../Components/Fixed/GenericTable'
 import { GetAllGenders, GetAllMemberByGenderId, GetAllMembers, GetMemberByGenderId, GetMembers } from '../Services/MembersServices';
 import { Gender, Member } from '../Models/MemberModel';
 import { Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, InputAdornment, Pagination, TextField } from '@mui/material';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 const MembersForm: React.FC = () => {
 
@@ -100,6 +104,34 @@ const MembersForm: React.FC = () => {
     setOpen(false);
   };
 
+  const [newMemberData, setNewMemberData] = useState({
+    id: '',
+    firstName: '',
+    lastName: '',
+    emailAddress: '',
+    mobileNumber: 0,
+    address: '',
+    dob: new Date(),
+    genderId: 0,
+    isActive: true,
+  });
+
+  const handleFormChange = (event: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
+    const { name, value } = event.target;
+
+    if (name === 'dob' && value instanceof Date) {
+      setNewMemberData((prevData) => ({
+        ...prevData,
+        dob: value,
+      }));
+    } else {
+      setNewMemberData((prevData) => ({
+        ...prevData,
+        [name as string]: value,
+      }));
+    }
+  };
+
 
   return (
     <LayoutComponent>
@@ -143,7 +175,7 @@ const MembersForm: React.FC = () => {
           style={{ paddingLeft: 20 }}
         />
 
-        <Button variant="contained" onClick={handleClickOpen} style={{ marginLeft: 445}}>
+        <Button variant="contained" onClick={handleClickOpen} style={{ marginLeft: 445 }}>
           Add Member
         </Button>
         <Dialog
@@ -155,42 +187,90 @@ const MembersForm: React.FC = () => {
               event.preventDefault();
               const formData = new FormData(event.currentTarget);
               const formJson = Object.fromEntries((formData as any).entries());
-              const name = formJson.name;
+              const name = formJson.firstName;
               const email = formJson.email;
-              console.log(name, email);
+              console.log({ "Name": name, "Email": email });
               handleClose();
             },
           }}
         >
-          <DialogTitle>Member</DialogTitle>
+          <DialogTitle>Add Member</DialogTitle>
           <DialogContent>
-            <TextField
-              autoFocus
-              required
-              margin="dense"
-              id="name"
-              name="name"
-              label="First Name"
-              type="text"
-              fullWidth
-              variant="standard"
-            />
+            <div style={{display: "grid", gridTemplateColumns:"1fr 1fr", gap:"20px"}}>
+              <TextField
+                autoFocus
+                required
+                margin="dense"
+                id="name"
+                name="firstName"
+                label="First Name"
+                type="text"
+                variant="filled"
+              />
 
-            <TextField
-              autoFocus
-              required
-              margin="dense"
-              id="name"
-              name="email"
-              label="Email Address"
-              type="email"
-              fullWidth
-              variant="standard"
-            />
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                name="lastName"
+                label="Last Name"
+                type="text"
+                variant="filled"
+              />
+
+              <TextField
+                autoFocus
+                required
+                margin="dense"
+                id="name"
+                name="email"
+                label="Email Address"
+                type="email"
+                variant="filled"
+              />
+
+              <TextField
+                autoFocus
+                required
+                margin="dense"
+                id="name"
+                name="mobileNo"
+                label="Mobile Number"
+                type="number"
+                variant="filled"
+              />
+
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                name="address"
+                label="Address"
+                type="text"
+                variant="filled"
+              />
+
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={['DatePicker']}>
+                  <DatePicker label="DOB" />
+                </DemoContainer>
+              </LocalizationProvider>
+
+              <Autocomplete
+                value={genderOptions.find((gender) => gender.id === selectedGenderId) || null}
+                onChange={(event, newValue) => {
+                  setSelectedGenderId(newValue ? newValue.id : '');
+                }}
+                options={genderOptions}
+                sx={{ width: 250 }}
+                getOptionLabel={(option) => option.genderName}
+                renderInput={(params) => <TextField {...params} label="Select Gender" />}
+              />
+            </div>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button type="submit">Save</Button>
+            <Button onClick={handleClose} variant='contained'>Cancel</Button>
+            <Button type="submit" variant='contained' style={{marginRight: 15}}>Save</Button>
           </DialogActions>
         </Dialog>
       </div>
