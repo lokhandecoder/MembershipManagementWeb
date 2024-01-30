@@ -34,7 +34,7 @@ const MembersForm: React.FC = () => {
           membersData = await GetMembers(currentPage, pageSize);
           setMembersData(membersData);
           fetchAllData()
-          console.log(membersData);
+          // console.log(membersData);
         }
       }
       catch (error) {
@@ -143,7 +143,7 @@ const MembersForm: React.FC = () => {
           style={{ paddingLeft: 20 }}
         />
 
-        <Button variant="outlined" onClick={handleClickOpen} style={{ marginLeft: 60}}>
+        <Button variant="contained" onClick={handleClickOpen} style={{ marginLeft: 445}}>
           Add Member
         </Button>
         <Dialog
@@ -155,14 +155,27 @@ const MembersForm: React.FC = () => {
               event.preventDefault();
               const formData = new FormData(event.currentTarget);
               const formJson = Object.fromEntries((formData as any).entries());
+              const name = formJson.name;
               const email = formJson.email;
-              console.log(email);
+              console.log(name, email);
               handleClose();
             },
           }}
         >
           <DialogTitle>Member</DialogTitle>
           <DialogContent>
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="name"
+              name="name"
+              label="First Name"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+
             <TextField
               autoFocus
               required
