@@ -15,3 +15,10 @@ export interface Gender {
   genderCode: string;
   genderName: string;
 }
+
+export interface FilterDto {
+  genderId: number;
+  firstName: string | null;
+  emailAddress: string | null;
+  mobileNumber: number;
+}

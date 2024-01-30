@@ -1,12 +1,16 @@
 import React from 'react';
 // import "../../Resources/Styles/GenericTable.css"
-import { Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, IconButton } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface TableProps {
   data: { [key: string]: any }[];
+  onEdit: (index: number) => void; 
+  onDelete: (index: number) => void; 
 }
 
-const TableComponent: React.FC<TableProps> = ({ data }) => {
+const TableComponent: React.FC<TableProps> = ({ data, onEdit, onDelete }) => {
 
 	const columns = data.length > 0 ? Object.keys(data[0]) : []
 
@@ -17,8 +21,9 @@ const TableComponent: React.FC<TableProps> = ({ data }) => {
           <TableHead>
             <TableRow>
               {columns.map((column) => (
-                <TableCell key={column}>{column}</TableCell>
+                <TableCell key={column}>{column.toUpperCase()}</TableCell>
               ))}
+              <TableCell>ACTION</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -29,6 +34,14 @@ const TableComponent: React.FC<TableProps> = ({ data }) => {
                     {typeof item[column] === 'boolean' ? item[column].toString() : item[column]}
                   </TableCell>
                 ))}
+                <TableCell>
+                  <IconButton color="primary" onClick={() => onEdit && onEdit(index)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton color="error" onClick={() => onDelete && onDelete(index)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
