@@ -109,9 +109,9 @@ export async function GetMemberByGenderId(id:number, page: number = 1, pageSize:
   }
 }
 
-export async function GetMemberBasedOnFilter(body: any, page: number = 1, pageSize: number = 10) {
+export async function GetMemberBasedOnFilter(body: FilterDto, page: number = 1, pageSize: number = 10) {
   try{
-    const getData = await axios.get(`http://localhost:5115/api/members/filter/paginated?page=${page}&pageSize=${pageSize}`, body)
+    const getData = await axios.post(`http://localhost:5115/api/members/filter/paginated?page=${page}&pageSize=${pageSize}`, body)
     console.log("GetData", getData.data);
     return getData.data;
   } catch (error){
