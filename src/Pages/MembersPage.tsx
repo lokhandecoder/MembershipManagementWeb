@@ -7,29 +7,30 @@ import { Alert, Autocomplete, Button, Dialog, DialogActions, DialogContent, Dial
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
+import useCustomSnackbar from '../Components/useCustomSnackbar';
+import { log } from 'console';
 
 const MembersForm: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
-
   const [members, setMembersData] = useState<Member[]>([]);
+  const [allMembers, setAllMembers] = useState<Member[]>([]);
   const [selectedMemberData, setSelectedMemberData] = useState<Member | null>(null);
   const [genderOptions, setGenderOptions] = useState<Gender[]>([]);
   const [selectedGenderId, setSelectedGenderId] = useState<number | 0>(0);
-  const [selectedGenderIdDialog, setSelectedGenderIdDialog] = useState<number | 0>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(5);
   const [totalRows, setTotalRows] = useState<number>(0);
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  // const [searchTerm, setSearchTerm] = useState<string>('');
   const [isActive, setIsActive] = useState(true);
   const [open, setOpen] = useState(false);
-  const [editMode, setEditMode] = useState<boolean>(false);
+  const [errors, setErrors] = useState<Partial<Record<keyof Member, string>>>({});
   const [selectedRowIndex, setSelectedRowIndex] = useState<number | null>(null);
   const [newMemberData, setNewMemberData] = useState<Member>({
     id: '',
     firstName: '',
     lastName: '',
     emailAddress: '',
-    mobileNumber: 0,
+    mobileNumber: undefined,
     address: '',
     dob: '',
     genderId: 0,
@@ -41,25 +42,68 @@ const MembersForm: React.FC = () => {
     emailAddress: null,
     mobileNumber: 0,
   });
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const snack = useCustomSnackbar();
 
-  const handleSnackbarClose = () => setSnackbarOpen(false);
+  // const [snackbarOpen, setSnackbarOpen] = useState(false);
+  // const [snackbarMessage, setSnackbarMessage] = useState('');
 
-  const showSnackbar = (message: string) => {
-    setSnackbarMessage(message);
-    setSnackbarOpen(true);
+  // const handleSnackbarClose = () => setSnackbarOpen(false);
+
+  // const showSnackbar = (message: string) => {
+  //   setSnackbarMessage(message);
+  //   setSnackbarOpen(true);
+  // };
+
+  const isFormDataValid = (formData: Member) => {
+    const newErrors: Partial<Record<keyof Member, string>> = {};
+    if (formData.firstName.trim() === "") {
+      newErrors.firstName = "Please enter a first name.";
+    }
+    if (formData.lastName.trim() === "") {
+      newErrors.lastName = "Please enter a last name.";
+    }
+    if (formData.dob === "") {
+      newErrors.dob = "Please select Date of Birth."
+      snack.showSnackbar(
+        `${'Please select Date of Birth.'}`,
+        "warning",
+        { vertical: "top", horizontal: "center" },
+        5000
+      );
+    }
+    if (formData.genderId === 0) {
+      newErrors.genderId = "Please select Gender"
+      snack.showSnackbar(
+        `${'Please select Gender'}`,
+        "warning",
+        { vertical: "top", horizontal: "center" },
+        5000
+      );
+    }
+    if (formData.mobileNumber === 0 || formData.mobileNumber === null) {
+      newErrors.mobileNumber = "Please enter a mobile number.";
+    }
+    if (!formData.emailAddress || !/^\S+@\S+\.\S+$/.test(formData.emailAddress)) {
+      newErrors.emailAddress = "Please enter a valid email address.";
+    }
+
+    const isValid = Object.keys(newErrors).length === 0;
+
+    setErrors(newErrors);
+    return isValid;
   };
 
   const handleSearch = async () => {
     try {
       // setFilterDto((prevFilterDto) => ({ ...prevFilterDto, genderId: selectedGenderId }));
       filterDto.genderId = selectedGenderId;
-      if(filterDto.genderId !== 0 || filterDto.firstName !== null || filterDto.emailAddress !== null || filterDto.mobileNumber !== 0){
+      if (filterDto.genderId !== 0 || filterDto.firstName !== null || filterDto.emailAddress !== null || filterDto.mobileNumber !== 0) {
         const membersData = await GetMemberBasedOnFilter(filterDto, currentPage, pageSize);
         setMembersData(membersData);
+        setTotalRows(membersData.length);
+        
         fetchDataByGender(Number(selectedGenderId));
-      }else{
+      } else {
         fetchData();
       }
       // const membersData = await GetMemberBasedOnFilter(filterDto, currentPage, pageSize);
@@ -68,7 +112,13 @@ const MembersForm: React.FC = () => {
 
     } catch (error: any) {
       console.error("Error fetching data:", error);
-      showSnackbar(`${error.response?.data || 'Error occurred'}`);
+      // showSnackbar(`${error.response?.data || 'Error occurred'}`);
+      snack.showSnackbar(
+        `Error Found`,
+        "warning",
+        { vertical: "top", horizontal: "center" },
+        5000
+      );
     }
   }
 
@@ -81,22 +131,27 @@ const MembersForm: React.FC = () => {
         fetchAllData();
         setMembersData(membersData)
 
-      }else{
+      } else {
         const membersData = await GetMemberBasedOnFilter(filterDto, currentPage, pageSize);
         setMembersData(membersData);
         fetchDataByGender(Number(selectedGenderId));
       }
-     
-      // const membersData = await GetAllMembers()
+
     } catch (error: any) {
       console.error("Error fetching data:", error);
-      showSnackbar(`${error.response?.data || 'Error occurred'}`);
+      // showSnackbar(`${error.response?.data || 'Error occurred'}`);
+      snack.showSnackbar(
+        `${error.response?.data || 'Error occurred'}`,
+        "warning",
+        { vertical: "top", horizontal: "center" },
+        5000
+      );
     }
   };
 
   const fetchAllData = async () => {
     const alldata = await GetAllMembers();
-    console.log("A;;", alldata.length)
+    setAllMembers(alldata);
     setTotalRows(alldata.length);
   };
 
@@ -118,13 +173,26 @@ const MembersForm: React.FC = () => {
     try {
       const memberIdToDelete = members[index].id;
       await DeleteMemberById(memberIdToDelete);
-      showSnackbar('Member deleted successfully');
+      // showSnackbar('Member deleted successfully');
+      snack.showSnackbar(
+        `Member deleted successfully`,
+        "success",
+        { vertical: "top", horizontal: "center" },
+        5000
+      );
       fetchData();
     } catch (error: any) {
       console.error("Error deleting member:", error);
-      showSnackbar(`${error.response?.data || 'Error occurred'}`);
+      // showSnackbar(`${error.response?.data || 'Error occurred'}`);
+      snack.showSnackbar(
+        `${error.response?.data || 'Error occurred'}`,
+        "warning",
+        { vertical: "top", horizontal: "center" },
+        5000
+      );
     }
   };
+
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
     setCurrentPage(newPage);
@@ -158,7 +226,6 @@ const MembersForm: React.FC = () => {
 
   const handleClose = () => {
     setOpen(false);
-    setEditMode(false);
     setSelectedMemberData(null);
   };
 
@@ -175,41 +242,64 @@ const MembersForm: React.FC = () => {
     }
   };
 
-  const handleSave = async () => {
-    console.log("Gender", selectedGenderIdDialog);
+  const handleSave = async (e: any) => {
+    e.preventDefault();
+    console.log(newMemberData);
+    let val;
     try {
       if (selectedRowIndex != null) {
-        newMemberData.genderId = selectedGenderIdDialog;
-        const updatedMember = await UpdateMembers(newMemberData.id, newMemberData);
-        console.log('Updated Member:', updatedMember);
-        showSnackbar('Member updated successfully');
-      } else {
-        const isDuplicate = members.some(
-          (member) =>
-            member.emailAddress.toLowerCase() === newMemberData.emailAddress.toLowerCase() ||
-            member.mobileNumber === newMemberData.mobileNumber
-        );
-
-        if (isDuplicate) {
-          console.log('Error message set:', errorMessage);
-          setErrorMessage('Email or Mobile Number already exists');
-          return;
+        if (!isFormDataValid(newMemberData)) {
+          console.log("Error");
+          val = true;
+          console.log(val);
         } else {
-          newMemberData.genderId = selectedGenderIdDialog;
+          const updatedMember = await UpdateMembers(newMemberData.id, newMemberData);
+          console.log('Updated Member:', updatedMember);
+          // showSnackbar('Member updated successfully');
+          snack.showSnackbar(
+            `${'Member updated successfully'}`,
+            "success",
+            { vertical: "top", horizontal: "center" },
+            5000
+          );
+          val = false;
+        }
+
+        setOpen(val);
+        fetchData();
+      } else {
+        if (!isFormDataValid(newMemberData)) {
+          console.log("Error");
+          val = true;
+        } else {
+          console.log("AddMember")
           const addmember = await AddMembers(newMemberData);
           console.log("Added", addmember);
-          showSnackbar('Member added successfully');
+          // showSnackbar('Member added successfully');
+          snack.showSnackbar(
+            `${'Member added successfully'}`,
+            "success",
+            { vertical: "top", horizontal: "center" },
+            5000
+          );
+          val = false;
+          setErrorMessage('');
         }
-        setErrorMessage('');
-      }
 
-      setOpen(false);
-      setEditMode(false);
-      fetchData();
+        setOpen(val);
+        fetchData();
+      }
     } catch (error: any) {
+      // alert(JSON.stringify(error))
       console.error("Error saving data:", error.response?.data);
       setOpen(true);
-      showSnackbar(`Error Occurred: ${error.response?.data || 'Unknown error'}`);
+      // showSnackbar(`Error Occurred: ${error.response?.data || 'Unknown error'}`);
+      snack.showSnackbar(
+        `Error Occurred: ${error.response?.data || 'Unknown error'}`,
+        "warning",
+        { vertical: "top", horizontal: "center" },
+        5000
+      );
     }
   };
 
@@ -217,7 +307,6 @@ const MembersForm: React.FC = () => {
     if (index !== null) {
       const selectedMember = members[index];
       setOpen(true);
-      setEditMode(true);
       setNewMemberData({
         id: selectedMember.id,
         firstName: selectedMember.firstName,
@@ -229,6 +318,7 @@ const MembersForm: React.FC = () => {
         genderId: selectedMember.genderId,
         isActive: selectedMember.isActive,
       });
+      console.log(newMemberData.genderId)
       setSelectedRowIndex(index);
     }
   };
@@ -240,10 +330,10 @@ const MembersForm: React.FC = () => {
       firstName: '',
       lastName: '',
       emailAddress: '',
-      mobileNumber: 0,
+      mobileNumber: undefined,
       address: '',
       dob: '',
-      genderId: 1,
+      genderId: 0,
       isActive: true,
     });
     setSelectedRowIndex(null);
@@ -256,6 +346,7 @@ const MembersForm: React.FC = () => {
           value={genderOptions.find((gender) => gender.id === selectedGenderId) || null}
           onChange={(event, newValue) => {
             setSelectedGenderId(newValue ? newValue.id : 0);
+            // setFilterDto((previous) => ({ ...previous, genderId: newValue? newValue.id: 0}))
           }}
           options={genderOptions}
           sx={{ width: 250 }}
@@ -265,7 +356,7 @@ const MembersForm: React.FC = () => {
 
         <Autocomplete
           disablePortal
-          options={transformedData.map((member) => member.firstName)}
+          options={allMembers.map((member) => member.firstName)}
           sx={{ width: 250 }}
           renderInput={(params) => <TextField {...params} label="Search FirstName" />}
           onChange={(event, newValue) => {
@@ -276,7 +367,7 @@ const MembersForm: React.FC = () => {
 
         <Autocomplete
           disablePortal
-          options={transformedData.map((member) => member.emailAddress)}
+          options={allMembers.map((member) => member.emailAddress)}
           sx={{ width: 250 }}
           renderInput={(params) => <TextField {...params} label="Search Email" />}
           onChange={(event, newValue) => {
@@ -287,7 +378,7 @@ const MembersForm: React.FC = () => {
 
         <Autocomplete
           disablePortal
-          options={transformedData.map((member) => String(member.mobileNumber))}
+          options={allMembers.map((member) => String(member.mobileNumber))}
           sx={{ width: 250 }}
           renderInput={(params) => <TextField {...params} label="Search Mobile No." />}
           onChange={(event, newValue) => {
@@ -321,65 +412,89 @@ const MembersForm: React.FC = () => {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", alignItems: 'center' }}>
               <TextField
                 autoFocus
-                required
+                // required
+                autoComplete='off'
                 margin="dense"
                 id="name"
                 name="firstName"
                 label="First Name"
                 type="text"
-                variant="filled"
+                variant="outlined"
                 value={newMemberData.firstName}
-                onChange={(e) => setNewMemberData({ ...newMemberData, firstName: e.target.value })}
+                onChange={(e) => {
+                  setNewMemberData({ ...newMemberData, firstName: e.target.value }); setErrors((prevErrors) => ({ ...prevErrors, firstName: '' }));
+                }}
+                error={!!errors.firstName}
+                helperText={errors.firstName || ""}
+
               />
 
               <TextField
                 autoFocus
+                autoComplete='off'
                 margin="dense"
                 id="name"
                 name="lastName"
                 label="Last Name"
                 type="text"
-                variant="filled"
+                variant="outlined"
                 value={newMemberData.lastName}
-                onChange={(e) => setNewMemberData({ ...newMemberData, lastName: e.target.value })}
+                onChange={(e) => { 
+                  setNewMemberData({ ...newMemberData, lastName: e.target.value }); setErrors((prevErrors) => ({ ...prevErrors, lastName: '' }));
+                }}
+                error={!!errors.lastName}
+                helperText={errors.lastName || ""}
               />
 
               <TextField
                 autoFocus
-                required
+                // required
+                autoComplete='off'
                 margin="dense"
                 id="name"
                 name="email"
                 label="Email Address"
                 type="email"
-                variant="filled"
+                variant="outlined"
                 value={newMemberData.emailAddress}
-                onChange={(e) => setNewMemberData({ ...newMemberData, emailAddress: e.target.value })}
+                onChange={(e) => { 
+                  setNewMemberData({ ...newMemberData, emailAddress: e.target.value }); setErrors((prevErrors) => ({ ...prevErrors, emailAddress: '' }));
+                }}
+                error={!!errors.emailAddress}
+                helperText={errors.emailAddress || ""}
               />
 
               <TextField
                 autoFocus
-                required
+                // required
+                autoComplete='off'
                 margin="dense"
                 id="name"
                 name="mobileNo"
                 label="Mobile Number"
                 type="number"
-                variant="filled"
+                variant="outlined"
                 value={newMemberData.mobileNumber}
-                onChange={(e) => setNewMemberData({ ...newMemberData, mobileNumber: e.target.value === '' ? 0 : parseInt(e.target.value, 10) })}
+                onChange={(e) => { 
+                  setNewMemberData({ ...newMemberData, mobileNumber: e.target.value === '' ? 0 : parseInt(e.target.value, 10) }); setErrors((prevErrors) => ({ ...prevErrors, mobileNumber: '' }));
+                }}
+                error={!!errors.mobileNumber}
+                helperText={errors.mobileNumber || ""}
               />
 
               <TextField
                 autoFocus
+                autoComplete='off'
                 margin="dense"
                 id="name"
                 name="address"
                 label="Address"
                 type="text"
-                variant="filled"
+                variant="outlined"
                 value={newMemberData.address}
-                onChange={(e) => setNewMemberData({ ...newMemberData, address: e.target.value })}
+                onChange={(e) => { 
+                  setNewMemberData({ ...newMemberData, address: e.target.value }); setErrors((prevErrors) => ({ ...prevErrors, address: '' }));
+                }}
               />
 
               <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -389,14 +504,14 @@ const MembersForm: React.FC = () => {
                   onChange={(date) => setNewMemberData({
                     ...newMemberData,
                     dob: date ? dayjs(date).format('YYYY-MM-DD') : '',
-                  })} />
+                  })}
+                  disableFuture />
               </LocalizationProvider>
 
               <Autocomplete
-                // value={editMode ? (genderOptions.find((gender) => gender.id === newMemberData.genderId) || null) : (genderOptions.find((gender) => gender.id === selectedGenderIdDialog) || null)}
-                value={genderOptions.find((gender) => gender.id === selectedGenderIdDialog) || null}
+                value={genderOptions.find((gender) => gender.id === newMemberData.genderId) || null}
                 onChange={(event, newValue) => {
-                  setSelectedGenderIdDialog(newValue ? newValue.id : 0);
+                  setNewMemberData({ ...newMemberData, genderId: newValue ? newValue.id : 0 })
                 }}
                 options={genderOptions}
                 sx={{ width: 250 }}
@@ -420,7 +535,7 @@ const MembersForm: React.FC = () => {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} variant='contained'>Cancel</Button>
-            <Button type="submit" variant='contained' style={{ marginRight: 15 }} onClick={handleSave}>Save</Button>
+            <Button type="submit" variant='contained' style={{ marginRight: 15 }} onClick={(e) => handleSave(e)}>Save</Button>
           </DialogActions>
         </Dialog>
       </div>
@@ -432,7 +547,7 @@ const MembersForm: React.FC = () => {
         <>Total Members = {totalRows}</>
       </div>
 
-      <Snackbar
+      {/* <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
         onClose={handleSnackbarClose}
@@ -440,6 +555,20 @@ const MembersForm: React.FC = () => {
       >
         <Alert onClose={handleSnackbarClose} sx={{ color: 'black' }}>
           {snackbarMessage}
+        </Alert>
+      </Snackbar> */}
+      <Snackbar
+        open={snack.open}
+        autoHideDuration={snack.duration}
+        onClose={snack.handleSnackbarClose}
+        anchorOrigin={snack.position}
+      >
+        <Alert
+          onClose={snack.handleSnackbarClose}
+          severity={snack.severity}
+          sx={{ width: "100%" }}
+        >
+          {snack.message}
         </Alert>
       </Snackbar>
     </LayoutComponent>

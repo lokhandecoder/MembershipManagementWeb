@@ -3,7 +3,7 @@ export interface Member {
     firstName: string;
     lastName: string;
     emailAddress: string;
-    mobileNumber: number;
+    mobileNumber: number | undefined;
     address: string;
     dob: string;
     genderId: number;
