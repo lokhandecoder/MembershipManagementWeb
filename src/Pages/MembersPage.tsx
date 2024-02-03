@@ -8,21 +8,18 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import useCustomSnackbar from '../Components/useCustomSnackbar';
-import { log } from 'console';
 
 const MembersForm: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [members, setMembersData] = useState<Member[]>([]);
-  // const [allMembers, setAllMembers] = useState<Member[]>([]);
-  // const [selectedMemberData, setSelectedMemberData] = useState<Member | null>(null);
   const [genderOptions, setGenderOptions] = useState<Gender[]>([]);
-  // const [selectedGenderId, setSelectedGenderId] = useState<number | 0>(0);
   const [dialogTitle, setDialogTitle] = useState<string>('Add Member');
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
   const [pageSize, setPageSize] = useState<number>(5);
   const [totalRows, setTotalRows] = useState<number>(0);
   const [isActive, setIsActive] = useState<boolean>(true);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const [errors, setErrors] = useState<Partial<Record<keyof Member, string | null>>>({});
   const [selectedRowIndex, setSelectedRowIndex] = useState<number | null>(null);
   const [newMemberData, setNewMemberData] = useState<Member>({
@@ -47,17 +44,6 @@ const MembersForm: React.FC = () => {
   });
   const snack = useCustomSnackbar();
 
-  const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
-
-  // const [snackbarOpen, setSnackbarOpen] = useState(false);
-  // const [snackbarMessage, setSnackbarMessage] = useState('');
-
-  // const handleSnackbarClose = () => setSnackbarOpen(false);
-
-  // const showSnackbar = (message: string) => {
-  //   setSnackbarMessage(message);
-  //   setSnackbarOpen(true);
-  // };
 
   const isFormDataValid = (formData: Member) => {
     const newErrors: Partial<Record<keyof Member, string>> = {};
@@ -69,61 +55,28 @@ const MembersForm: React.FC = () => {
     }
     if (formData.dob === "") {
       newErrors.dob = "Please select Date of Birth."
-      snack.showSnackbar(
-        `${'Please select Date of Birth.'}`,
-        "warning",
-        { vertical: "top", horizontal: "center" },
-        5000
-      );
     }
     if (formData.genderId === 0) {
       newErrors.genderId = "Please select Gender"
     }
-    // if (formData.mobileNumber === 0 || formData.mobileNumber === undefined) {
-    //   newErrors.mobileNumber = "Please enter a mobile number.";
-    // }
     if (!formData.mobileNumber || !/^\d{10}$/.test(String(formData.mobileNumber))) {
       newErrors.mobileNumber = "Please enter a valid 10-digit mobile number.";
     }
-
     if (!formData.emailAddress || !/^\S+@\S+\.\S+$/.test(formData.emailAddress)) {
       newErrors.emailAddress = "Please enter a valid email address.";
     }
-
     const isValid = Object.keys(newErrors).length === 0;
-
     setErrors(newErrors);
     return isValid;
   };
 
+
   const handleSearch = async () => {
     try {
-      // // setFilterDto((prevFilterDto) => ({ ...prevFilterDto, genderId: selectedGenderId }));
-      // filterDto.genderId = selectedGenderId;
-      // if (filterDto.genderId !== 0 || filterDto.firstName !== null || filterDto.emailAddress !== null || filterDto.mobileNumber !== 0) {
-      //   const membersData = await GetMemberBasedOnFilter(filterDto, currentPage, pageSize);
-
-      //   alert(JSON.stringify(membersData));
-      //   console.log(membersData);
-
-      //   setMembersData(membersData);
-      //   setTotalRows(membersData.length);
-
-      //   fetchDataByGender(Number(selectedGenderId));
-      // } else {
-      //   fetchData();
-      // }
-      // // const membersData = await GetMemberBasedOnFilter(filterDto, currentPage, pageSize);
-      // // setMembersData(membersData);
-      // // fetchDataByGender(Number(selectedGenderId));
-
       // alert(JSON.stringify(filterDto));
-
       fetchData();
-
     } catch (error: any) {
       console.error("Error fetching data:", error);
-      // showSnackbar(`${error.response?.data || 'Error occurred'}`);
       snack.showSnackbar(
         `Error Found`,
         "warning",
@@ -134,30 +87,17 @@ const MembersForm: React.FC = () => {
   }
 
 
-
   const fetchData = async () => {
     try {
       const genderdata = await GetAllGenders();
       setGenderOptions(genderdata);
-      // if (!selectedGenderId) {
-      //   const membersData = await GetMembers(currentPage, pageSize);
-      //   fetchAllData();
-      //   setMembersData(membersData)
-
-      // } else {
-      //   const membersData = await GetMemberBasedOnFilter(filterDto, currentPage, pageSize);
-      //   setMembersData(membersData);
-      //   fetchDataByGender(Number(selectedGenderId));
-      // }
-
       const membersData = await GetMemberBasedOnFilter(filterDto, currentPage, pageSize);
-      console.log(membersData);
+      // console.log(membersData);
       setMembersData(membersData.members);
       setTotalRows(membersData.totalCount);
 
     } catch (error: any) {
       console.error("Error fetching data:", error);
-      // showSnackbar(`${error.response?.data || 'Error occurred'}`);
       snack.showSnackbar(
         `${error.response?.data || 'Error occurred'}`,
         "warning",
@@ -167,22 +107,8 @@ const MembersForm: React.FC = () => {
     }
   };
 
-  // const fetchAllData = async () => {
-  //   const alldata = await GetAllMembers();
-  //   setAllMembers(alldata);
-  //   setTotalRows(alldata.length);
-  // };
-
-  // const fetchDataByGender = async (genderId: number) => {
-  //   const alldata = await GetAllMemberByGenderId(genderId);
-  //   setTotalRows(alldata.length);
-  // };
 
   useEffect(() => {
-    // if (selectedRowIndex !== null && open) {
-    //   const selectedMember = members[selectedRowIndex];
-    //   setSelectedMemberData(selectedMember);
-    // }
     fetchData();
   }, [currentPage, pageSize, selectedRowIndex, open]);
 
@@ -191,7 +117,6 @@ const MembersForm: React.FC = () => {
     try {
       const memberIdToDelete = members[index].id;
       await DeleteMemberById(memberIdToDelete);
-      // showSnackbar('Member deleted successfully');
       snack.showSnackbar(
         `Member deleted successfully`,
         "success",
@@ -201,7 +126,6 @@ const MembersForm: React.FC = () => {
       fetchData();
     } catch (error: any) {
       console.error("Error deleting member:", error);
-      // showSnackbar(`${error.response?.data || 'Error occurred'}`);
       snack.showSnackbar(
         `${error.response?.data || 'Error occurred'}`,
         "warning",
@@ -214,12 +138,9 @@ const MembersForm: React.FC = () => {
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
     setCurrentPage(newPage);
-    // alert(selectedGenderId)
-    // let memberbygender = members.filter((item) => item.genderId === selectedGenderId);
-    // setMembersData(memberbygender);
-    // fetchDataByGender(selectedGenderId); // Fetch data for the new page with the current filter
-
   };
+
+
   const getGenderNameById = (genderId: number): string => {
     const selectedGender = genderOptions.find((gender) => gender.id === genderId);
     return selectedGender ? selectedGender.genderName : '';
@@ -242,11 +163,12 @@ const MembersForm: React.FC = () => {
     gender: getGenderNameById(genderId),
   }));
 
+
   const handleClose = () => {
     setOpen(false);
-    // setSelectedMemberData(null);
     setErrors({ firstName: '', lastName: '', emailAddress: '', mobileNumber: undefined })
   };
+
 
   const handleFormChange = async (event: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>, checked?: boolean) => {
     const { name, value } = event.target;
@@ -262,20 +184,18 @@ const MembersForm: React.FC = () => {
     }
   };
 
+
   const handleSave = async (e: any) => {
     e.preventDefault();
-    console.log(newMemberData);
     let val;
     try {
       if (selectedRowIndex != null) {
         if (!isFormDataValid(newMemberData)) {
-          console.log("Error");
           val = true;
           console.log(val);
         } else {
           const updatedMember = await UpdateMembers(newMemberData.id, newMemberData);
           console.log('Updated Member:', updatedMember);
-          // showSnackbar('Member updated successfully');
           snack.showSnackbar(
             `${'Member updated successfully'}`,
             "success",
@@ -283,19 +203,16 @@ const MembersForm: React.FC = () => {
             5000
           );
           val = false;
+          fetchData();
         }
-
         setOpen(val);
-        fetchData();
       } else {
         if (!isFormDataValid(newMemberData)) {
-          console.log("Error");
           val = true;
         } else {
           console.log("AddMember")
           const addmember = await AddMembers(newMemberData);
           console.log("Added", addmember);
-          // showSnackbar('Member added successfully');
           snack.showSnackbar(
             `${'Member added successfully'}`,
             "success",
@@ -303,17 +220,14 @@ const MembersForm: React.FC = () => {
             5000
           );
           val = false;
-          setErrorMessage('');
+          // setErrorMessage('');
+          fetchData();
         }
-
         setOpen(val);
-        fetchData();
       }
     } catch (error: any) {
-      // alert(JSON.stringify(error))
       console.error("Error saving data:", error.response?.data);
       setOpen(true);
-      // showSnackbar(`Error Occurred: ${error.response?.data || 'Unknown error'}`);
       snack.showSnackbar(
         `Error Occurred: ${error.response?.data || 'Unknown error'}`,
         "warning",
@@ -322,6 +236,7 @@ const MembersForm: React.FC = () => {
       );
     }
   };
+
 
   const handleEdit = (index: number) => {
     if (index !== null) {
@@ -339,10 +254,11 @@ const MembersForm: React.FC = () => {
         genderId: selectedMember.genderId,
         isActive: selectedMember.isActive,
       });
-      console.log(newMemberData.genderId)
+      // console.log(newMemberData.genderId)
       setSelectedRowIndex(index);
     }
   };
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -361,6 +277,7 @@ const MembersForm: React.FC = () => {
     setSelectedRowIndex(null);
   };
 
+
   const handleInputChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
     if (newValue.length >= 1) {
@@ -373,11 +290,9 @@ const MembersForm: React.FC = () => {
       }
     } else {
       setFilteredMembers([]);
-
     }
-    // setFilterDto((previous) => ({ ...previous, memberId: null, firstName: null, emailAddress: null, mobileNumber: undefined }));  
-
   };
+
 
   const handleMemberSelect = (event: React.ChangeEvent<{}>, selectedOption: string | null | number, property: string) => {
     const selectedMember = filteredMembers.find(
@@ -396,22 +311,10 @@ const MembersForm: React.FC = () => {
     }
   };
 
+
   return (
     <LayoutComponent>
       <div style={{ display: 'flex', padding: 20, alignItems: 'center' }}>
-        {/* <Autocomplete
-          value={genderOptions.find((gender) => gender.id === selectedGenderId) || null}
-          value={genderOptions.find((gender) => gender.id === filterDto.genderId) || null}
-          onChange={(event, newValue) => {
-            setSelectedGenderId(newValue ? newValue.id : 0);
-            // setFilterDto((previous) => ({ ...previous, genderId: newValue? newValue.id: 0}))
-          }}
-          options={genderOptions}
-          sx={{ width: 250 }}
-          getOptionLabel={(option) => option.genderName}
-          renderInput={(params) => <TextField {...params} label="Select Gender" />}
-        /> */}
-
         <Autocomplete
           value={genderOptions.find((gender) => gender.id === filterDto.genderId) || null}
           onChange={(event, newValue) => {
@@ -422,17 +325,6 @@ const MembersForm: React.FC = () => {
           getOptionLabel={(option) => option.genderName}
           renderInput={(params) => <TextField {...params} label="Select Gender" />}
         />
-
-        {/* <Autocomplete
-          disablePortal
-          options={allMembers.map((member) => member.firstName)}
-          sx={{ width: 250 }}
-          renderInput={(params) => <TextField {...params} label="Search FirstName" />}
-          onChange={(event, newValue) => {
-            setFilterDto((previous) => ({ ...previous, firstName: newValue }));
-          }}
-          style={{ paddingLeft: 20 }}
-        /> */}
 
         <Autocomplete
           disablePortal
@@ -485,6 +377,7 @@ const MembersForm: React.FC = () => {
         <Button variant="contained" onClick={() => handleClickOpen()} style={{ marginLeft: 350, height: '40px' }}>
           Add Member
         </Button>
+
         <Dialog
           open={open}
           onClose={handleClose}
@@ -501,7 +394,6 @@ const MembersForm: React.FC = () => {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", alignItems: 'center' }}>
               <TextField
                 autoFocus
-                // required
                 autoComplete='off'
                 margin="dense"
                 id="name"
@@ -511,7 +403,8 @@ const MembersForm: React.FC = () => {
                 variant="outlined"
                 value={newMemberData.firstName}
                 onChange={(e) => {
-                  setNewMemberData({ ...newMemberData, firstName: e.target.value }); setErrors((prevErrors) => ({ ...prevErrors, firstName: '' }));
+                  setNewMemberData({ ...newMemberData, firstName: e.target.value }); 
+                  setErrors((prevErrors) => ({ ...prevErrors, firstName: '' }));
                 }}
                 error={!!errors.firstName}
                 helperText={errors.firstName || ""}
@@ -529,7 +422,8 @@ const MembersForm: React.FC = () => {
                 variant="outlined"
                 value={newMemberData.lastName}
                 onChange={(e) => {
-                  setNewMemberData({ ...newMemberData, lastName: e.target.value }); setErrors((prevErrors) => ({ ...prevErrors, lastName: '' }));
+                  setNewMemberData({ ...newMemberData, lastName: e.target.value }); 
+                  setErrors((prevErrors) => ({ ...prevErrors, lastName: '' }));
                 }}
                 error={!!errors.lastName}
                 helperText={errors.lastName || ""}
@@ -537,7 +431,6 @@ const MembersForm: React.FC = () => {
 
               <TextField
                 autoFocus
-                // required
                 autoComplete='off'
                 margin="dense"
                 id="name"
@@ -547,7 +440,8 @@ const MembersForm: React.FC = () => {
                 variant="outlined"
                 value={newMemberData.emailAddress}
                 onChange={(e) => {
-                  setNewMemberData({ ...newMemberData, emailAddress: e.target.value }); setErrors((prevErrors) => ({ ...prevErrors, emailAddress: '' }));
+                  setNewMemberData({ ...newMemberData, emailAddress: e.target.value }); 
+                  setErrors((prevErrors) => ({ ...prevErrors, emailAddress: '' }));
                 }}
                 error={!!errors.emailAddress}
                 helperText={errors.emailAddress || ""}
@@ -555,7 +449,6 @@ const MembersForm: React.FC = () => {
 
               <TextField
                 autoFocus
-                // required
                 autoComplete='off'
                 margin="dense"
                 id="name"
@@ -565,7 +458,8 @@ const MembersForm: React.FC = () => {
                 variant="outlined"
                 value={newMemberData.mobileNumber}
                 onChange={(e) => {
-                  setNewMemberData({ ...newMemberData, mobileNumber: e.target.value === '' ? 0 : parseInt(e.target.value, 10) }); setErrors((prevErrors) => ({ ...prevErrors, mobileNumber: undefined }));
+                  setNewMemberData({ ...newMemberData, mobileNumber: e.target.value === '' ? 0 : parseInt(e.target.value, 10) }); 
+                  setErrors((prevErrors) => ({ ...prevErrors, mobileNumber: undefined }));
                 }}
                 error={!!errors.mobileNumber}
                 helperText={errors.mobileNumber || undefined}
@@ -598,32 +492,27 @@ const MembersForm: React.FC = () => {
               </LocalizationProvider> */}
 
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label={
-                    <span style={{ color: !!errors.dob ? 'red' : 'inherit' }}>DOB</span>
-                  }
-                  value={newMemberData.dob ? dayjs(newMemberData.dob) : null}
-                  onChange={(date) => setNewMemberData({
-                    ...newMemberData,
-                    dob: date ? dayjs(date).format('YYYY-MM-DD') : '',
-                  })}
-                  onError={(newError) => {
-                    setErrors({ ...errors, dob: newError });
-                  }}
-                  // renderInput={(params) => (
-                  //   <TextField
-                  //     {...params}
-                  //     helperText={!!errors.dob ? errors.dob : ''}
-                  //     error={!!errors.dob}
-                  //   />
-                  // )}
-                  disableFuture
-                  slotProps={{
-                    textField: {
-                      helperText: !!errors.dob ? errors.dob : '',
-                    },
-                  }}
-                />
+                <FormControl sx={{ minWidth: 250 }} >
+                  <DatePicker
+                    label={ <span style={{ color: !!errors.dob ? 'red' : 'inherit' }}> DOB </span> }
+                    value={newMemberData.dob ? dayjs(newMemberData.dob) : null}
+                    onChange={(date) => {
+                      setNewMemberData({ ...newMemberData, dob: date ? dayjs(date).format('YYYY-MM-DD') : '', }); 
+                      setErrors((prevErrors) => ({ ...prevErrors, dob: '' }));
+                    }}
+                    // renderInput={(params) => (
+                    //   <TextField
+                    //     {...params}
+                    //     helperText={!!errors.dob ? errors.dob : ''}
+                    //     error={!!errors.dob}
+                    //   />
+                    // )}
+                    disableFuture
+                  />
+                  {!!errors.dob && (
+                    <FormHelperText sx={{ color: 'red' }}>{errors.dob}</FormHelperText>
+                  )}
+                </FormControl>
               </LocalizationProvider>
 
               {/* <Autocomplete
@@ -642,11 +531,12 @@ const MembersForm: React.FC = () => {
                 <Select
                   labelId="select-gender-label"
                   id="select-gender"
-                  value={genderOptions.find((gender) => gender.id === newMemberData.genderId) || null}
+                  value={genderOptions.find((gender) => gender.id === newMemberData.genderId) || undefined}
                   label="Select Gender"
                   onChange={(event) => {
                     const newValue = genderOptions.find((gender) => gender.id === Number(event.target.value)) || null;
                     setNewMemberData({ ...newMemberData, genderId: newValue ? newValue.id : 0 });
+                    setErrors((prevErrors) => ({ ...prevErrors, genderId: '' }));
                   }}
                   renderValue={(selected) => (selected ? selected.genderName : '')}
                   MenuProps={{
@@ -676,9 +566,6 @@ const MembersForm: React.FC = () => {
                   onChange={handleFormChange}
                 />
               </div>
-
-              <div style={{ color: 'red', marginBottom: '10px' }}>{errorMessage}</div>
-
             </div>
           </DialogContent>
           <DialogActions>
@@ -695,16 +582,6 @@ const MembersForm: React.FC = () => {
         <>Total Members = {totalRows}</>
       </div>
 
-      {/* <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleSnackbarClose} sx={{ color: 'black' }}>
-          {snackbarMessage}
-        </Alert>
-      </Snackbar> */}
       <Snackbar
         open={snack.open}
         autoHideDuration={snack.duration}
