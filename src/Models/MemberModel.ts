@@ -19,6 +19,9 @@ export interface Gender {
 export interface FilterDto {
   genderId: number;
   firstName: string | null;
+  nameMemberId: string | null;
+  emailMemberId: string | null;
+  numberMemberId: string | null;
   emailAddress: string | null;
-  mobileNumber: number;
+  mobileNumber: number | undefined;
 }
