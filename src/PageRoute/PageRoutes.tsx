@@ -3,8 +3,8 @@ import { Route, Routes } from 'react-router-dom'
 import HomePage from '../Pages/HomePage'
 import Payment from '../Pages/Payment'
 import MembersForm from '../Pages/MembersPage'
-import Subscription from '../Pages/Subscription'
-//import Subscription from '../Pages/Subscription copy'
+//import Subscription from '../Pages/Subscription'
+import Subscription from '../Pages/Subscription copy'
 
 function PageRoutes() {
   return (
