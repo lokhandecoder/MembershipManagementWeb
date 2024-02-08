@@ -442,7 +442,6 @@ const MemberUtility = () => {
 
   return {
     memberUtility,
-    setMemberUtility,
     handleFirstName,
     handleLastName,
     handleEmail,
@@ -452,7 +451,6 @@ const MemberUtility = () => {
     handleGenderId,
     genderOptions,
     dialogTitle,
-    currentPage,
     filteredMembers,
     pageSize,
     totalRows,
@@ -469,7 +467,6 @@ const MemberUtility = () => {
     handleEdit,
     handleClickOpen,
     handleInputChange,
-    handleMemberSelect,
     handleSave,
     handleAutocompleteGender,
     handleAutocompleteFirstName,

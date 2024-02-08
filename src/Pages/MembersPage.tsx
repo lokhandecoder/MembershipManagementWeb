@@ -1,21 +1,13 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import LayoutComponent from '../Components/Fixed/LayoutComponent';
 import GenericTable from '../Components/Fixed/GenericTable';
-// import { AddMembers, DeleteMemberById, GetAllGenders, GetMemberBasedOnFilter, GetMemberFilter, UpdateMembers } from '../Services/MembersServices';
-// import { FilterDto, Gender, Member } from '../Models/MemberModel';
 import { Alert, Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormHelperText, InputLabel, MenuItem, Pagination, Paper, Select, SelectChangeEvent, Snackbar, Switch, TextField } from '@mui/material';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
-// import dayjs from 'dayjs';
-// import useCustomSnackbar from '../Components/useCustomSnackbar';
-// import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import MemberUtility from '../utilities/MemberUtitlity';
 
 const MembersForm: React.FC = () => {
 
   const {
     memberUtility,
-    setMemberUtility,
     handleFirstName,
     handleLastName,
     handleEmail,
@@ -25,7 +17,6 @@ const MembersForm: React.FC = () => {
     handleGenderId,
     genderOptions,
     dialogTitle,
-    currentPage,
     filteredMembers,
     pageSize,
     totalRows,
@@ -42,7 +33,6 @@ const MembersForm: React.FC = () => {
     handleEdit,
     handleClickOpen,
     handleInputChange,
-    handleMemberSelect,
     handleSave,
     handleAutocompleteGender,
     handleAutocompleteFirstName,
