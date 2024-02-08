@@ -6,6 +6,9 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import ProfileImage from "../Components/HomePageComponents/ProfileImage";
 import ProfileInfo from "../Components/HomePageComponents/ProfileInfo";
+import { DateField, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -24,6 +27,11 @@ function HomePage() {
         </Grid>
         <Grid item xs={8}>
           <ProfileInfo />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DemoContainer components={['DateField']}>
+        <DateField label="Basic date field" />
+      </DemoContainer>
+    </LocalizationProvider>
         </Grid>
       </Grid>
     </LayoutComponent>

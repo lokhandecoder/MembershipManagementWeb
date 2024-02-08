@@ -10,6 +10,7 @@ function LayoutComponent({ children }: LayoutComponentProps) {
   return (
     <>
      <div>
+      
      <MiniDrawer />
       <SideNav />
       <div style={{marginLeft: "4%", marginTop: "1.5%"}}>
