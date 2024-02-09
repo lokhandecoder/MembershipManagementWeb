@@ -2,47 +2,35 @@ import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Member } from "../../Models/MemberModel";
-import { GetMemberByID } from "../../Services/MembersServices";
-import { LogginID } from "../../API_CONFIG";
+import { UserById } from "../../Services/UserServices";
+import { UserSignup } from "../../Models/UserModel";
 
 function ProfileInfo() {
-  const [member, setMember] = useState<Member | null>(null);
+  const [user, setUser] = useState<UserSignup | null>(null);
+  const userid = sessionStorage.getItem("userId");    
 
   useEffect(() => {
-    const userid = LogginID;
 
     const fetchMember = async () => {
-      const data = await GetMemberByID(userid);
-      setMember(data);
-      console.log(member);
+      const data = await UserById(userid)
+      setUser(data);
+      console.log(user);
     };
     fetchMember();
   }, []);
 
   return (
     <>
-      {member && (
+      {user && (
         <Box sx={{ width: "100%", maxWidth: 500 }}>
           <Typography variant="h4" gutterBottom>
-            {`${member.firstName} ${member.lastName}`}
+            {`${user.firstName} ${user.lastName}`}
           </Typography>
           <Typography variant="subtitle1" gutterBottom>
-            Email: {member.emailAddress}
+            Email: {user.emailAddress}
           </Typography>
           <Typography variant="subtitle1" gutterBottom>
-            Mobile Number: {member.mobileNumber}
-          </Typography>
-          <Typography variant="subtitle1" gutterBottom>
-            Address: {member.address}
-          </Typography>
-          <Typography variant="subtitle1" gutterBottom>
-            Date of Birth: {member.dob}
-          </Typography>
-          <Typography variant="subtitle1" gutterBottom>
-            Gender: {member.genderId === 1 ? "Male" : "Female"}
-          </Typography>
-          <Typography variant="subtitle1" gutterBottom>
-            Active: {member.isActive ? "Yes" : "No"}
+            Mobile Number: {user.mobileNumber}
           </Typography>
         </Box>
       )}

@@ -16,6 +16,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { useAppStore } from '../../appStore';
+import { useNavigate } from 'react-router-dom';
 
 interface AppBarProps extends MuiAppBarProps {
     open?: boolean;
@@ -67,6 +68,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function MiniDrawer() {
+  const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -79,6 +81,12 @@ export default function MiniDrawer() {
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const handleSignOut = () => {
+    sessionStorage.removeItem("Token")
+    sessionStorage.removeItem("userId")
+    navigate("/login");
+  }
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -111,7 +119,7 @@ export default function MiniDrawer() {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleSignOut}>Sign Out</MenuItem>
     </Menu>
   );
 
