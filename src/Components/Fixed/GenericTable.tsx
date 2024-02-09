@@ -21,9 +21,9 @@ const TableComponent: React.FC<TableProps> = ({ data, onEdit, onDelete }) => {
           <TableHead>
             <TableRow>
               {columns.map((column) => (
-                <TableCell key={column}>{column.toUpperCase()}</TableCell>
+                <TableCell key={column}><b>{column.toUpperCase()}</b></TableCell>
               ))}
-              <TableCell>ACTION</TableCell>
+              <TableCell><b>ACTION</b></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

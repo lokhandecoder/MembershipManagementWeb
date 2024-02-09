@@ -24,13 +24,13 @@ function ProfileInfo() {
       {user && (
         <Box sx={{ width: "100%", maxWidth: 500 }}>
           <Typography variant="h4" gutterBottom>
-            {`${user.firstName} ${user.lastName}`}
+            {`${user.firstName.toUpperCase()} ${user.lastName.toUpperCase()}`}
           </Typography>
           <Typography variant="subtitle1" gutterBottom>
-            Email: {user.emailAddress}
+            <b>Email:</b> {user.emailAddress}
           </Typography>
           <Typography variant="subtitle1" gutterBottom>
-            Mobile Number: {user.mobileNumber}
+            <b>Mobile Number:</b> {user.mobileNumber}
           </Typography>
         </Box>
       )}

@@ -21,11 +21,8 @@ const ProfileImage: React.FC<ProfileImageProps> = ({ defaultImage }) => {
   };
 
   const handleSaveImage = () => {
-    // Add your logic to save the image (e.g., send it to the server)
-    // For demonstration purposes, we'll log the image data to the console
     console.log("Saving image:", image);
 
-    // Reset the image state to allow changing the picture again
     setImage(null);
   };
 
