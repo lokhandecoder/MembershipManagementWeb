@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import HomePage from '../Pages/HomePage'
-import Payment from '../Pages/Payment'
 import MembersForm from '../Pages/MembersPage'
 import SignIn from '../Pages/SignIn'
 import SignUp from '../Pages/SignUp'
@@ -32,7 +31,6 @@ function PageRoutes() {
       {token && (
         <>
           <Route path='/' element={<HomePage />} />
-          <Route path='/payment' element={<Payment />} />
           <Route path='/membertable' element={<MembersForm />} />
           <Route path='/subscription' element={<SubscriptionPage />} />
         </>
