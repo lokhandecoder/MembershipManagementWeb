@@ -1,18 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 // import "../../Resources/Styles/GenericTable.css"
 import { Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import PaymentIcon from '@mui/icons-material/Payment';
 
 interface TableProps {
   data: { [key: string]: any }[];
-  onEdit: (index: number) => void; 
-  onDelete: (index: number) => void; 
+  onEdit: (index: number) => void;
+  onDelete: (index: number) => void;
+  onPay?: (index: number) => void;
 }
 
-const TableComponent: React.FC<TableProps> = ({ data, onEdit, onDelete }) => {
+const TableComponent: React.FC<TableProps> = ({ data, onEdit, onDelete, onPay }) => {
 
-	const columns = data.length > 0 ? Object.keys(data[0]) : []
+  const [subscription, setSubscription] = useState<boolean>(false);
+
+  const columns = data.length > 0 ? Object.keys(data[0]) : []
+
+  useEffect(() => {
+    console.log(window.location.pathname);
+    if (window.location.pathname === "/subscription") {
+      setSubscription(true);
+    }
+  }, [])
 
   return (
     <Card elevation={3}>
@@ -35,6 +46,11 @@ const TableComponent: React.FC<TableProps> = ({ data, onEdit, onDelete }) => {
                   </TableCell>
                 ))}
                 <TableCell>
+                  {subscription &&
+                    <IconButton color="secondary" onClick={() => onPay && onPay(index)}>
+                      <PaymentIcon />
+                    </IconButton>
+                  }
                   <IconButton color="primary" onClick={() => onEdit && onEdit(index)}>
                     <EditIcon />
                   </IconButton>

@@ -7,6 +7,7 @@ import SignIn from '../Pages/SignIn'
 import SignUp from '../Pages/SignUp'
 import PageNotFoundPage from '../Pages/PageNotFoundPage'
 import ThankYouPage from '../Pages/ThankYouPage'
+import SubscriptionPage from '../Pages/SubscriptionPage'
 // import SignInUpPage from '../Pages/SignIn-UpPage'
 
 function PageRoutes() {
@@ -33,6 +34,7 @@ function PageRoutes() {
           <Route path='/' element={<HomePage />} />
           <Route path='/payment' element={<Payment />} />
           <Route path='/membertable' element={<MembersForm />} />
+          <Route path='/subscription' element={<SubscriptionPage />} />
         </>
       )}
 
