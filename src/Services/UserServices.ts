@@ -5,8 +5,8 @@ import { UserSignIn, UserSignup } from "../Models/UserModel";
 export async function AddUser(body: UserSignup): Promise<UserSignup> {
   try {
     // const adduser = await axios.post(`http://localhost:5115/api/user`, body);
-    const adduser = await axios.post(`http://localhost:5116/api/user`, body);
-    // const adduser = await axios.post(`http://localhost:8083/api/user`, body);
+    // const adduser = await axios.post(`http://localhost:5116/api/user`, body);
+    const adduser = await axios.post(`http://localhost:8083/api/user`, body);
     return adduser.data;
   } catch (error) {
     console.error(error);
@@ -17,8 +17,8 @@ export async function AddUser(body: UserSignup): Promise<UserSignup> {
 export async function UserLogin(body: UserSignIn): Promise<any> {
   try {
     // const adduser = await axios.post(`http://localhost:5115/api/auth/login`, body);
-    const adduser = await axios.post(`http://localhost:5116/api/auth/login`, body);
-    // const adduser = await axios.post(`http://localhost:8083/api/auth/login`, body);
+    // const adduser = await axios.post(`http://localhost:5116/api/auth/login`, body);
+    const adduser = await axios.post(`http://localhost:8083/api/auth/login`, body);
     return adduser.data;
   } catch (error) {
     console.error(error);
@@ -29,8 +29,8 @@ export async function UserLogin(body: UserSignIn): Promise<any> {
 export async function UserById(id: any): Promise<any> {
   try {
     // const getuser = await axios.get(`http://localhost:5115/api/user/${id}`);
-    const getuser = await axios.get(`http://localhost:5116/api/user/${id}`);
-    // const getuser = await axios.get(`http://localhost:8083/api/user/${id}`);
+    // const getuser = await axios.get(`http://localhost:5116/api/user/${id}`);
+    const getuser = await axios.get(`http://localhost:8083/api/user/${id}`);
     return getuser.data;
   } catch (error) {
     console.error(error);

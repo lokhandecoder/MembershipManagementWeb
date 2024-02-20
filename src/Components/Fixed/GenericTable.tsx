@@ -10,9 +10,10 @@ interface TableProps {
   onEdit: (index: number) => void;
   onDelete: (index: number) => void;
   onPay?: (index: number) => void;
+  amount?: number[]; 
 }
 
-const TableComponent: React.FC<TableProps> = ({ data, onEdit, onDelete, onPay }) => {
+const TableComponent: React.FC<TableProps> = ({ data, onEdit, onDelete, onPay, amount }) => {
 
   const [subscription, setSubscription] = useState<boolean>(false);
 
@@ -47,9 +48,9 @@ const TableComponent: React.FC<TableProps> = ({ data, onEdit, onDelete, onPay })
                 ))}
                 <TableCell>
                   {subscription &&
-                    <IconButton color="secondary" onClick={() => onPay && onPay(index)}>
+                    <IconButton color="secondary" onClick={() => onPay && onPay(index)} disabled={amount && amount[index] === 0.00}>
                       <PaymentIcon />
-                    </IconButton>
+                    </IconButton> 
                   }
                   <IconButton color="primary" onClick={() => onEdit && onEdit(index)}>
                     <EditIcon />

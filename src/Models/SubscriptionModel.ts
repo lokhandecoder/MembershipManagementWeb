@@ -7,12 +7,24 @@ export interface SubscriptionModel{
   endDate: string,
   discountAmount: number,
   costAfterDiscount: number,
+  gst: number,
   cgst: number,
   sgst: number,
   totalAmount: number,
   paidAmount: number,
   balanceAmount: number,
   id: string
+}
+
+export interface AddSubscriptionModel {
+  userId: string | null,
+  planId: string,
+  memberId: string | null,
+  startDate: string,
+  gst: number,
+  endDate: string,
+  discountAmount: number | undefined,
+  paidAmount: number | undefined,
 }
 
 export interface PlanModel{

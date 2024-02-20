@@ -3,8 +3,8 @@ import { FilterDto, Member } from "../Models/MemberModel";
 
 export async function GetMemberByID(id : string): Promise<Member> {
   try {
-    // const getData = await axios.get(`http://localhost:8083/api/members/${id}`);
-    const getData = await axios.get(`http://localhost:5115/api/members/${id}`);
+    const getData = await axios.get(`http://localhost:8083/api/members/${id}`);
+    // const getData = await axios.get(`http://localhost:5115/api/members/${id}`);
     // const getData = await axios.get(`http://localhost:5116/api/members/${id}`);
     // console.log("getData", getData.data);
     return getData.data;
@@ -28,8 +28,8 @@ export async function GetMemberByID(id : string): Promise<Member> {
 
 export async function GetAllMembers() {
   try{
-    // const getData = await axios.get(`http://localhost:8083/api/members/`);
-     const getData = await axios.get('http://localhost:5115/api/members');
+    const getData = await axios.get(`http://localhost:8083/api/members/`);
+    //  const getData = await axios.get('http://localhost:5115/api/members');
     // const getData = await axios.get('http://localhost:5116/api/members');
     // console.log("GetData", getData.data);
     return getData.data;
@@ -41,8 +41,8 @@ export async function GetAllMembers() {
 
 export async function GetMemberFilter(filter:string | number) {
   try{
-    // const getData = await axios.get(`http://localhost:8083/api/members/GetMemberFilter?filter=${filter}`);
-     const getData = await axios.get(`http://localhost:5115/api/members/GetMemberFilter?filter=${filter}`);
+    const getData = await axios.get(`http://localhost:8083/api/members/GetMemberFilter?filter=${filter}`);
+    //  const getData = await axios.get(`http://localhost:5115/api/members/GetMemberFilter?filter=${filter}`);
     // const getData = await axios.get(`http://localhost:5116/api/members/GetMemberFilter?filter=${filter}`);
     // console.log("GetData", getData.data);
     return getData.data;
@@ -56,8 +56,8 @@ export async function GetMemberFilter(filter:string | number) {
 
 export async function AddMembers(body:Member): Promise<Member> {
   try{
-    // const postData = await axios.post(`http://localhost:8083/api/members/`, body);
-    const postData = await axios.post('http://localhost:5115/api/members', body);
+    const postData = await axios.post(`http://localhost:8083/api/members/`, body);
+    // const postData = await axios.post('http://localhost:5115/api/members', body);
     // const postData = await axios.post('http://localhost:5116/api/members', body);
     // console.log("GetData", postData.data);
     return postData.data;
@@ -69,8 +69,8 @@ export async function AddMembers(body:Member): Promise<Member> {
 
 export async function UpdateMembers(id:string, body:Member): Promise<Member> {
   try{
-    // const updateData = await axios.put(`http://localhost:8083/api/members/${id}`, body);
-    const updateData = await axios.put(`http://localhost:5115/api/members/${id}`, body);
+    const updateData = await axios.put(`http://localhost:8083/api/members/${id}`, body);
+    // const updateData = await axios.put(`http://localhost:5115/api/members/${id}`, body);
     // const updateData = await axios.put(`http://localhost:5116/api/members/${id}`, body);
     // console.log("GetData", postData.data);
     return updateData.data;
@@ -82,8 +82,8 @@ export async function UpdateMembers(id:string, body:Member): Promise<Member> {
 
 export async function DeleteMemberById(id:string) {
   try{
-    // const deleteData = await axios.delete(`http://localhost:8083/api/members/${id}`);
-    const deleteData = await axios.delete(`http://localhost:5115/api/members/${id}`);
+    const deleteData = await axios.delete(`http://localhost:8083/api/members/${id}`);
+    // const deleteData = await axios.delete(`http://localhost:5115/api/members/${id}`);
     // const deleteData = await axios.delete(`http://localhost:5116/api/members/${id}`);
     // console.log("GetData", postData.data);
     return deleteData.data;
@@ -95,8 +95,8 @@ export async function DeleteMemberById(id:string) {
 
 export async function GetAllGenders() {
   try{
-    // const getData = await axios.get('http://localhost:8083/api/gender');
-    const getData = await axios.get('http://localhost:5115/api/gender');
+    const getData = await axios.get('http://localhost:8083/api/gender');
+    // const getData = await axios.get('http://localhost:5115/api/gender');
     // const getData = await axios.get('http://localhost:5116/api/gender');
     // console.log("GetData", getData.data);
     return getData.data;
@@ -120,8 +120,8 @@ export async function GetAllGenders() {
 
 export async function GetMemberByGenderId(id:number, page: number = 1, pageSize: number = 10) {
   try{
-  //  const getData = await axios.get(`http://localhost:8083/api/members/genderId/paginated/${id}?page=${page}&pageSize=${pageSize}`);
-    const getData = await axios.get(`http://localhost:5115/api/members/genderId/paginated/${id}?page=${page}&pageSize=${pageSize}`);
+   const getData = await axios.get(`http://localhost:8083/api/members/genderId/paginated/${id}?page=${page}&pageSize=${pageSize}`);
+    // const getData = await axios.get(`http://localhost:5115/api/members/genderId/paginated/${id}?page=${page}&pageSize=${pageSize}`);
     // const getData = await axios.get(`http://localhost:5116/api/members/genderId/paginated/${id}?page=${page}&pageSize=${pageSize}`);
     // console.log("GetData", getData.data);
     return getData.data;
@@ -133,8 +133,8 @@ export async function GetMemberByGenderId(id:number, page: number = 1, pageSize:
 
 export async function GetMemberBasedOnFilter(body: FilterDto, page: number = 1, pageSize: number = 10) {
   try{
-    // const getData = await axios.post(`http://localhost:8083/api/members/filter/paginated?page=${page}&pageSize=${pageSize}`, body)
-     const getData = await axios.post(`http://localhost:5115/api/members/filter/paginated?page=${page}&pageSize=${pageSize}`, body)
+    const getData = await axios.post(`http://localhost:8083/api/members/filter/paginated?page=${page}&pageSize=${pageSize}`, body)
+    //  const getData = await axios.post(`http://localhost:5115/api/members/filter/paginated?page=${page}&pageSize=${pageSize}`, body)
     // const getData = await axios.post(`http://localhost:5116/api/members/filter/paginated?page=${page}&pageSize=${pageSize}`, body)
     // console.log("GetData", getData.data);
     return getData.data;
