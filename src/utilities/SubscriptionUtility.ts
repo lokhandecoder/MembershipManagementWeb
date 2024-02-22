@@ -127,19 +127,25 @@ const SubscriptionUtility = () => {
       discountAmount,
       costAfterDiscount,
       paidAmount,
+      planCost,
+      startDate,
+      endDate,
       ...rest
     }) => ({
       ...rest,
-      plan: getPlanNameById(planId),
       member: getMemberNameById(memberId),
+      plan: getPlanNameById(planId),
+      startDate: startDate,
+      endDate: endDate,
+      planCost: planCost,
       discount: discountAmount,
       cost: costAfterDiscount,
       gst: gst,
       cgst: cgst.toFixed(2),
       sgst: sgst.toFixed(2),
       totalcost: totalAmount.toFixed(2),
-      paidAmount: paidAmount,
-      balanceAmount: balanceAmount.toFixed(2),
+      paid: paidAmount,
+      balance: balanceAmount.toFixed(2),
     })
   );
 

@@ -13,7 +13,7 @@ export default function SubscriptionPage() {
 
   const { dialogTitle, handleDelete, setGst, handleInputChange, memberOptions, handleEndDate, handleBalanceAmount, handleDateChange, filteredMembers, handleEdit, handlecgst, handlesgst, handleTotalAmount, snack, handleAutocompleteMember, handleAutocompletePlan, handleDiscount, handlePaidAmount, payErrors, handleSave, handleStartDate, transformedData, handleClickOpen, handleClickPay, subscriptionUtility, open, openSub, handleCloseSub, handleClose, handlePayment, planOptions, paymentDetails, errors, handlePay, data, getplancost } = SubscriptionUtility();
   const today = dayjs();
-  const amount = transformedData.map((data)=> parseInt(data.balanceAmount, 10))
+  const amount = transformedData.map((data)=> parseInt(data.balance, 10))
  
   return (
     <LayoutComponent>
